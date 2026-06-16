@@ -170,7 +170,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-const ORDER_ENDPOINT_URL = "[MASUKKAN_URL_BACKEND_DI_SINI]";
+const ORDER_ENDPOINT_URL = "warungjajanceria.vercel.app/api/api-kirim-pesan.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("orderForm");
