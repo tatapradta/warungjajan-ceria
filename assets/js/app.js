@@ -169,3 +169,114 @@ document.addEventListener('keydown', (e) => {
         closeModal();
     }
 });
+
+const ORDER_ENDPOINT_URL = "[MASUKKAN_URL_BACKEND_DI_SINI]";
+
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("orderForm");
+    if (!form) return; // Form belum ada di halaman ini, hentikan.
+
+    const submitBtn = document.getElementById("submitBtn");
+    const btnText = submitBtn.querySelector(".btn-text");
+    const btnSpinner = submitBtn.querySelector(".btn-spinner");
+    const notif = document.getElementById("formNotif");
+
+    const fields = {
+        nama: document.getElementById("namaPemesan"),
+        pesanan: document.getElementById("detailPesanan"),
+        alamat: document.getElementById("alamatPengiriman"),
+        catatan: document.getElementById("catatanTambahan"),
+    };
+
+    const errors = {
+        nama: document.getElementById("errorNama"),
+        pesanan: document.getElementById("errorPesanan"),
+        alamat: document.getElementById("errorAlamat"),
+    };
+
+    // ---------- VALIDASI SEDERHANA ----------
+    // Mengecek field wajib tidak kosong (setelah trim spasi)
+    function validateForm() {
+        let isValid = true;
+
+        // reset state error sebelumnya
+        Object.values(fields).forEach((el) => el && el.classList.remove("input-error"));
+        Object.values(errors).forEach((el) => el && (el.textContent = ""));
+
+        if (!fields.nama.value.trim()) {
+            fields.nama.classList.add("input-error");
+            errors.nama.textContent = "Nama pemesan wajib diisi.";
+            isValid = false;
+        }
+
+        if (!fields.pesanan.value.trim()) {
+            fields.pesanan.classList.add("input-error");
+            errors.pesanan.textContent = "Detail pesanan wajib diisi.";
+            isValid = false;
+        }
+
+        if (!fields.alamat.value.trim()) {
+            fields.alamat.classList.add("input-error");
+            errors.alamat.textContent = "Alamat pengiriman wajib diisi.";
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    // ---------- TAMPILKAN NOTIFIKASI ----------
+    function showNotif(message, type) {
+        notif.textContent = message;
+        notif.className = `form-notif ${type}`; // "success" atau "error"
+        notif.hidden = false;
+    }
+
+    function setLoading(isLoading) {
+        submitBtn.disabled = isLoading;
+        btnSpinner.hidden = !isLoading;
+        btnText.textContent = isLoading ? "Mengirim..." : "Kirim Pesanan";
+    }
+
+    // ---------- SUBMIT FORM ----------
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        notif.hidden = true;
+
+        if (!validateForm()) {
+            showNotif("Mohon lengkapi data yang wajib diisi (*).", "error");
+            return;
+        }
+
+        const payload = {
+            nama: fields.nama.value.trim(),
+            pesanan: fields.pesanan.value.trim(),
+            alamat: fields.alamat.value.trim(),
+            catatan: fields.catatan.value.trim() || "-",
+        };
+
+        setLoading(true);
+
+        try {
+            // Kirim ke BACKEND SENDIRI, bukan langsung ke Telegram.
+            // Backend yang akan menyimpan token & chat ID, lalu
+            // meneruskan pesan ke Telegram Bot API.
+            const response = await fetch(ORDER_ENDPOINT_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                throw new Error("Gagal mengirim pesanan (status " + response.status + ")");
+            }
+
+            showNotif("✅ Pesanan berhasil dikirim! Kami akan segera memprosesnya.", "success");
+            form.reset();
+        } catch (err) {
+            console.error("Order submit error:", err);
+            showNotif("❌ Gagal mengirim pesanan. Silakan coba lagi.", "error");
+        } finally {
+            setLoading(false);
+        }
+    });
+});

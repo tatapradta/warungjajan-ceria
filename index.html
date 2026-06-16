@@ -131,6 +131,78 @@
         </div>
     </div>
 
+    <section class="order-section" id="pesan">
+    <div class="container">
+        <div class="order-header">
+            <h2 class="section-title">📝 Form Pemesanan</h2>
+            <p class="order-subtitle">Isi data di bawah ini, pesananmu langsung kami terima!</p>
+        </div>
+
+        <form id="orderForm" class="order-form" novalidate>
+            <!-- NAMA PEMESAN -->
+            <div class="form-group">
+                <label for="namaPemesan">Nama Pemesan <span class="required">*</span></label>
+                <input
+                    type="text"
+                    id="namaPemesan"
+                    name="namaPemesan"
+                    class="form-input"
+                    placeholder="Contoh: Budi Santoso"
+                    autocomplete="off"
+                >
+                <span class="error-message" id="errorNama"></span>
+            </div>
+
+            <!-- DETAIL PESANAN -->
+            <div class="form-group">
+                <label for="detailPesanan">Pilihan / Detail Pesanan <span class="required">*</span></label>
+                <textarea
+                    id="detailPesanan"
+                    name="detailPesanan"
+                    class="form-input"
+                    rows="3"
+                    placeholder="Contoh: 2x Cireng, 1x Esteh, 1x Cokolatos"
+                ></textarea>
+                <span class="error-message" id="errorPesanan"></span>
+            </div>
+
+            <!-- ALAMAT PENGIRIMAN -->
+            <div class="form-group">
+                <label for="alamatPengiriman">Alamat Pengiriman <span class="required">*</span></label>
+                <textarea
+                    id="alamatPengiriman"
+                    name="alamatPengiriman"
+                    class="form-input"
+                    rows="2"
+                    placeholder="Contoh: Jl. Mawar No. 10, RT 02/RW 03, Jakarta"
+                ></textarea>
+                <span class="error-message" id="errorAlamat"></span>
+            </div>
+
+            <!-- CATATAN TAMBAHAN (opsional) -->
+            <div class="form-group">
+                <label for="catatanTambahan">Catatan Tambahan <span class="optional">(opsional)</span></label>
+                <textarea
+                    id="catatanTambahan"
+                    name="catatanTambahan"
+                    class="form-input"
+                    rows="2"
+                    placeholder="Contoh: Jangan terlalu pedas, antar sore ya"
+                ></textarea>
+            </div>
+
+            <!-- TOMBOL KIRIM -->
+            <button type="submit" id="submitBtn" class="btn-submit">
+                <span class="btn-text">Kirim Pesanan</span>
+                <span class="btn-spinner" hidden></span>
+            </button>
+
+            <!-- AREA NOTIFIKASI SUKSES / GAGAL -->
+            <div id="formNotif" class="form-notif" role="alert" hidden></div>
+        </form>
+    </div>
+</section>
+
     <script src="assets/js/app.js"></script>
 
     <!-- FOOTER SECTION -->
